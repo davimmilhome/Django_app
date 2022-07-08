@@ -4,9 +4,22 @@ from django.contrib.auth.models import User
 
 class Post(models.Model):
 
-    title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250)
-    author = models.ForeignKey(User,
+    STATUS = (
+        ('rascunho','Rascunho'),
+        ('publicado','Publicado'),
+    )
+    title   = models.CharField(max_length=250)
+    slug    = models.SlugField(max_length=250)
+    author  = models.ForeignKey(User,
                                on_delete= models.CASCADE)
-    content = models.TextField()
-# Create your models here.
+    content     = models.TextField()
+    publicated = models.DateTimeField(default=timezone.now)
+    criate      = models.DateTimeField(auto_now_add=True)
+    altered     = models.DateTimeField(auto_now=True)
+    status      = models.CharField(max_length=10,choices=STATUS,default='rascunho')
+    
+    class Meta:
+        ordering = ('-publicated',)
+
+    def __str__(self):
+        return self.title
